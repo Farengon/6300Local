@@ -1,6 +1,5 @@
 package gtsi.sdp.windowsos;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ClassroomItemAdaper extends RecyclerView.Adapter<ClassroomItemAdaper.ViewHolder> {
+public class ClassroomItemAdapter extends RecyclerView.Adapter<ClassroomItemAdapter.ViewHolder> {
     private ArrayList<String> classroom_list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -30,7 +28,7 @@ public class ClassroomItemAdaper extends RecyclerView.Adapter<ClassroomItemAdape
         }
     }
 
-    public ClassroomItemAdaper (ArrayList<String> arg) {
+    public ClassroomItemAdapter (ArrayList<String> arg) {
         this.classroom_list = arg;
     }
 
@@ -41,6 +39,14 @@ public class ClassroomItemAdaper extends RecyclerView.Adapter<ClassroomItemAdape
                 .inflate(R.layout.classroom_state_item, viewGroup, false);
 
         ViewHolder holder = new ViewHolder(view);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                classroom_list.remove(holder.getAdapterPosition());
+                notifyDataSetChanged();
+            }
+        });
 
         return holder;
     }
