@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import gtsi.sdp.windowsos.models.History;
+import gtsi.sdp.windowsos.models.TaskManager;
 
 public class HistoryActivity extends AppCompatActivity {
     private RecyclerView history_list_view;
@@ -20,7 +21,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         history_list_view = findViewById(R.id.history_list);
 
-        adapter = new HistoryItemAdapter(initList());
+        adapter = new HistoryItemAdapter(TaskManager.getInstance().getHistoryList());
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         history_list_view.setLayoutManager(manager);

@@ -11,11 +11,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import gtsi.sdp.windowsos.models.History;
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<HistoryItemAdapter.ViewHolder> {
-    private ArrayList<History> history_list;
+    private List<History> history_list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView classroom;
@@ -32,7 +33,7 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<HistoryItemAdapter.
         }
     }
 
-    public HistoryItemAdapter (ArrayList<History> arg) {
+    public HistoryItemAdapter (List<History> arg) {
         this.history_list = arg;
     }
 

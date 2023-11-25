@@ -17,6 +17,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import gtsi.sdp.windowsos.models.Classroom;
+import gtsi.sdp.windowsos.models.ClassroomManager;
+import gtsi.sdp.windowsos.models.Task;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView classroom_list_view;
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         classroom_list_view = findViewById(R.id.classroom_list);
         icon_view = findViewById(R.id.icon_state);
 
-        adapter = new ClassroomItemAdapter(new ArrayList<String>());
+        adapter = new ClassroomItemAdapter();
         adapter.registerAdapterDataObserver(observer);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -54,10 +58,14 @@ public class MainActivity extends AppCompatActivity {
         Button add_button = findViewById(R.id.add_button);
         FloatingActionButton profile_button = findViewById(R.id.user_profile);
 
+        // if use sensor, change code below.
+        // Do not delete
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add_item("classroom" + adapter.getItemCount());
+                Classroom classroom = new Classroom(1 + adapter.getItemCount(), "window not close", true);
+                classroom.setCompleted(false);
+                adapter.add_item(classroom);
             }
         });
 
@@ -68,5 +76,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh data or perform any other actions needed when the activity is resumed
+        adapter.notifyDataSetChanged();
     }
 }
