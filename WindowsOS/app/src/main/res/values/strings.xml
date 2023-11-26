@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WindowsOS</string>
+    <string name="all_done">Everything is OK!</string>
+    <string name="reminder">Anomaly detected!</string>
+    <string name="opening_window">Window opening</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
