@@ -23,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         LinearLayout task_button = findViewById(R.id.tasks);
         LinearLayout history_button = findViewById(R.id.history);
+        LinearLayout ranking_button = findViewById(R.id.ranking);
 
         updateTaskAndHistoryCount();
 
@@ -42,6 +43,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, HistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ranking_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, RankingActivity.class);
                 startActivity(intent);
             }
         });

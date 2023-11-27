@@ -25,6 +25,7 @@
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".TaskListActivity"></activity>
         <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".RankingActivity"></activity>
     </application>
 
 </manifest>
