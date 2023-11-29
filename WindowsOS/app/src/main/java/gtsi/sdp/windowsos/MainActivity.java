@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Classroom classroom = new Classroom(1 + adapter.getItemCount(), "window not close", true);
+                Classroom classroom = new Classroom(401 + adapter.getItemCount(), "window not close", true);
                 classroom.setCompleted(false);
                 adapter.add_item(classroom);
             }

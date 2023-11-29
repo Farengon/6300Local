@@ -37,7 +37,7 @@ public class ClassroomItemAdapter extends RecyclerView.Adapter<ClassroomItemAdap
         }
 
         public void bind(Classroom classroom, View.OnClickListener clickListener) {
-            roomNumberTextView.setText("Classroom 40" + String.valueOf(classroom.getRoomNumber()));
+            roomNumberTextView.setText("Classroom " + String.valueOf(classroom.getRoomNumber()));
             hintTextView.setText(classroom.getHint());
             itemView.setClickable(classroom.getIsClickable());
 
