@@ -8,12 +8,21 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView classroom_list_view;
     private ClassroomItemAdapter adapter;
     private ImageView icon_view;
+    private TextView test_text;
+
+    private ServerSocket server_socket;
+    Thread server_tread = null;
+    private Handler update_info_handler;
 
     private RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -44,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        test_text = findViewById(R.id.test_text);
 
         classroom_list_view = findViewById(R.id.classroom_list);
         icon_view = findViewById(R.id.icon_state);
@@ -76,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        update_info_handler = new Handler(Looper.getMainLooper());
+        this.server_tread = new Thread(new ServerThread());
+        this.server_tread.start();
     }
 
     @Override
@@ -83,5 +103,66 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Refresh data or perform any other actions needed when the activity is resumed
         adapter.notifyDataSetChanged();
+    }
+
+    class ServerThread implements Runnable {
+        @Override
+        public void run() {
+            update_info_handler.post(new UpdateUIThread("start listening"));
+            Socket socket;
+            try {
+                server_socket = new ServerSocket(8080);
+                update_info_handler.post(new UpdateUIThread("start server"));
+                int i = 0;
+                while (!Thread.currentThread().isInterrupted()) {
+                    i++;
+                    socket = server_socket.accept();
+                    Log.i("accept", Integer.toString(i));
+                    try (DataInputStream dataInputStream = new DataInputStream(socket.getInputStream())) {
+                        byte[] buffer = new byte[1024];
+                        int bytesRead = dataInputStream.read(buffer, 0, buffer.length);
+                        if (bytesRead != -1) {
+                            String hexData = bytesToHex(buffer, bytesRead);
+                            update_info_handler.post(new UpdateUIThread(hexData));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    };
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class UpdateUIThread implements Runnable {
+        private String msg;
+
+        public UpdateUIThread(String str) {
+            this.msg = str;
+        }
+
+        @Override
+        public void run() {
+            test_text.setText(msg);
+            if (msg.equals("310d")) {
+                adapter.add_item(new Classroom(8, "Window open", true));
+            }
+            else if (msg.equals("300d")) {
+                adapter.remove(8, "Window open");
+            }
+        }
+    }
+
+    private String bytesToHex(byte[] bytes, int length) {
+        StringBuilder hexString = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            String hex = Integer.toHexString(0xff & bytes[i]);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }
