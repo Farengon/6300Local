@@ -7,34 +7,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-import gtsi.sdp.windowsos.models.History;
+import gtsi.sdp.windowsos.models.Rank;
 import gtsi.sdp.windowsos.models.TaskManager;
 
 public class RankingActivity extends AppCompatActivity {
     private RecyclerView ranking_list_view;
     private RankingItemAdapter adapter;
+    private List<Rank> rankingList;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
-
         ranking_list_view = findViewById(R.id.ranking_list);
 
-        adapter = new RankingItemAdapter(initList());
+        // get current rankingList
+        rankingList = TaskManager.getInstance().getRankingList();
+        TaskManager.calculateRankings(rankingList);
+        adapter = new RankingItemAdapter(rankingList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         ranking_list_view.setLayoutManager(manager);
         ranking_list_view.setAdapter(adapter);
     }
 
-    private ArrayList<String> initList() {
-        ArrayList<String> rl = new ArrayList<>();
-        rl.add("Place Holder");
-        rl.add("Second!");
-        rl.add("...");
-        rl.add("NULL");
-        rl.add("!@#$%^&*");
-        return rl;
-    }
+
 }

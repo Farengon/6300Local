@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gtsi.sdp.windowsos.models.History;
@@ -34,6 +35,7 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<HistoryItemAdapter.
     }
 
     public HistoryItemAdapter (List<History> arg) {
+        Collections.reverse(arg);
         this.history_list = arg;
     }
 

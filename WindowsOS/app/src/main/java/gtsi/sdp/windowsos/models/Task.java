@@ -67,7 +67,7 @@ public class Task{
                 countdownMillis = 0;
                 removeTask();
                 setClassroomClickable();
-                addHistory();
+                addBadHistory();
                 // Notify observers
                 // or update UI if needed
                 notifyObservers();
@@ -83,7 +83,7 @@ public class Task{
         ClassroomManager.getInstance().setClassroomClickable(this.getRoomNumber());
     }
 
-    private void addHistory() {
+    private void addBadHistory() {
         TaskManager.getInstance().addBadHistory(this);
     }
 
