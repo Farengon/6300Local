@@ -66,6 +66,9 @@ public class ProfileActivity extends AppCompatActivity {
         // # of tasks, history
         TextView task_num = findViewById(R.id.num_tasks);
         TextView history_num = findViewById(R.id.num_history);
+
+        TaskManager.getInstance().updateTaskAndHistory();
+
         task_num.setText(String.valueOf(TaskManager.getInstance().getTaskList().size()));
         history_num.setText(String.valueOf(TaskManager.getInstance().getHistoryList().size()));
 

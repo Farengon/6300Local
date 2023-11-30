@@ -3,6 +3,7 @@ package gtsi.sdp.windowsos.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,11 +55,22 @@ public class TaskManager {
 
     public void removeTask(Task task) { taskList.remove(task); }
 
-    public void removeTaskByFeature(int classroom_number, String hint) {
+    public void setCompleteTaskByFeature(int classroom_number, String hint) {
         for (Task task: taskList) {
             if (task.getRoomNumber() == classroom_number && task.getHint().equals(hint)) {
-                taskList.remove(task);
+                task.setCompleted(true);
                 break;
+            }
+        }
+    }
+
+    public void updateTaskAndHistory() {
+        Iterator<Task> iterator = taskList.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            if (task.isCompleted()) {
+                addGoodHistory(task);
+                iterator.remove();
             }
         }
     }

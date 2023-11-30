@@ -21,7 +21,7 @@ public class Rank {
     public void setScore(float score) { this.score = score; }
     public void setRanking(int rank) { this.ranking = rank; }
     public float calculateScore( int badHistory, int goodHistory ) {
-        score = (float) (goodHistory - badHistory * 0.5);
+        score = (float) (goodHistory - badHistory * 5);
         return score;
     }
 

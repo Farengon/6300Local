@@ -176,7 +176,8 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (msg.equals("300d")) {
                 adapter.remove(408, "Window open");
-                TaskManager.getInstance().removeTaskByFeature(408, "Window open");
+                TaskManager.getInstance().setCompleteTaskByFeature(408, "Window open");
+
             }
         }
     }
