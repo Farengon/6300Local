@@ -38,7 +38,7 @@ public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.ViewHo
         }
 
         public void bind(Task task) {
-            classroom.setText(String.valueOf("Classroom" + task.getRoomNumber()));
+            classroom.setText(String.valueOf("Classroom " + task.getRoomNumber()));
             hint.setText(task.getHint());
             updateCountdown(task.getCountdownMillis());
         }
@@ -70,7 +70,7 @@ public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Task cancelTask = TaskManager.getInstance().getTaskList().get(holder.getAdapterPosition());
-                TaskManager.getInstance().addBadHistory(cancelTask);
+//                TaskManager.getInstance().addBadHistory(cancelTask);
                 TaskManager.getInstance().getTaskList().remove(holder.getAdapterPosition());
 
                 // make the Classroom clickable again

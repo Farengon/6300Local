@@ -2,6 +2,7 @@ package gtsi.sdp.windowsos;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import gtsi.sdp.windowsos.models.History;
+import gtsi.sdp.windowsos.models.Rank;
+import gtsi.sdp.windowsos.models.TaskManager;
 
 public class RankingItemAdapter extends RecyclerView.Adapter<RankingItemAdapter.ViewHolder> {
-    private List<String> ranking_list;
+    private List<Rank> ranking_list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView ranking;
@@ -32,7 +35,7 @@ public class RankingItemAdapter extends RecyclerView.Adapter<RankingItemAdapter.
         }
     }
 
-    public RankingItemAdapter (List<String> arg) {
+    public RankingItemAdapter (List<Rank> arg) {
         this.ranking_list = arg;
     }
 
@@ -54,7 +57,16 @@ public class RankingItemAdapter extends RecyclerView.Adapter<RankingItemAdapter.
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.ranking.setText(Integer.toString(position+1));
-        viewHolder.nickname.setText(ranking_list.get(position));
+        viewHolder.nickname.setText(ranking_list.get(position).getStuName());
+
+        Rank currentUserRank = TaskManager.getInstance().getRank();
+        int currentUserRanking = currentUserRank.getRanking();
+
+        // Set Bold for current user in the ranking list
+        if (position == currentUserRanking - 1) {
+            viewHolder.ranking.setTextColor(Color.parseColor("#800080"));
+            viewHolder.nickname.setTextColor(Color.parseColor("#800080"));
+        }
 
         if (position == 0) {
             viewHolder.card_view.setBackgroundColor(Color.parseColor("#CCCCCC"));
@@ -65,7 +77,8 @@ public class RankingItemAdapter extends RecyclerView.Adapter<RankingItemAdapter.
         else if (position == 2) {
             viewHolder.card_view.setBackgroundColor(Color.parseColor("#EEEEEE"));
         }
-        // TODO: Set color (highlight) for current user in the ranking list
+
+
     }
 
     @Override
@@ -74,7 +87,7 @@ public class RankingItemAdapter extends RecyclerView.Adapter<RankingItemAdapter.
     }
 
     public void add_item(String r) {
-        ranking_list.add(0, r);
+//        ranking_list.add(0, r);
 //        notifyItemInserted(0);
         notifyDataSetChanged();
     }

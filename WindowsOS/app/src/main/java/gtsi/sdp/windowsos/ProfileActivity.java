@@ -69,8 +69,10 @@ public class ProfileActivity extends AppCompatActivity {
         task_num.setText(String.valueOf(TaskManager.getInstance().getTaskList().size()));
         history_num.setText(String.valueOf(TaskManager.getInstance().getHistoryList().size()));
 
+        // ranking
         TextView rank = findViewById(R.id.num_ranking);
-        rank.setText(String.valueOf(1));
+        int ranking = TaskManager.getInstance().getRank().getRanking();
+        rank.setText(String.valueOf(ranking));
     }
 
 }

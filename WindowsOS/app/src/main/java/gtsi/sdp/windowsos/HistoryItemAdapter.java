@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gtsi.sdp.windowsos.models.History;
@@ -54,9 +55,12 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<HistoryItemAdapter.
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.classroom.setText(history_list.get(position).getClassroom());
-        viewHolder.hint.setText(history_list.get(position).getHint());
-        if (history_list.get(position).getDone() == Boolean.TRUE) {
+
+        int reverseIndex = history_list.size() - 1 - position;
+        viewHolder.classroom.setText(history_list.get(reverseIndex).getClassroom());
+        viewHolder.hint.setText(history_list.get(reverseIndex).getHint());
+
+        if (history_list.get(reverseIndex).getDone() == Boolean.TRUE) {
             viewHolder.card_view.setBackgroundColor(Color.parseColor("#56DF56"));
         }
         else {
