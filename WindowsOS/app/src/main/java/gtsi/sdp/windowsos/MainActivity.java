@@ -15,20 +15,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import gtsi.sdp.windowsos.models.Classroom;
 import gtsi.sdp.windowsos.models.ClassroomManager;
 import gtsi.sdp.windowsos.models.Task;
+import gtsi.sdp.windowsos.models.TaskManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,11 +127,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 server_socket = new ServerSocket(8080);
                 update_info_handler.post(new UpdateUIThread("start server"));
-                int i = 0;
                 while (!Thread.currentThread().isInterrupted()) {
-                    i++;
                     socket = server_socket.accept();
-                    Log.i("accept", Integer.toString(i));
                     try (DataInputStream dataInputStream = new DataInputStream(socket.getInputStream())) {
                         byte[] buffer = new byte[1024];
                         int bytesRead = dataInputStream.read(buffer, 0, buffer.length);
@@ -146,10 +157,26 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             test_text.setText(msg);
             if (msg.equals("310d")) {
-                adapter.add_item(new Classroom(8, "Window open", true));
+                if (!adapter.inList(408, "Window open")) {
+                    adapter.add_item(new Classroom(408, "Window open", true));
+
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    executor.execute(() -> {
+                        // Background work: sending the email
+                        sendEmail("lliu484@gatech.edu", "New Task!", "Window in room408 is open!");
+
+                        handler.post(() -> {
+                            // UI Thread work: update the UI after sending the email, if necessary
+                            // For example, show a Toast or update a TextView
+                        });
+                    });
+                }
             }
             else if (msg.equals("300d")) {
-                adapter.remove(8, "Window open");
+                adapter.remove(408, "Window open");
+                TaskManager.getInstance().removeTaskByFeature(408, "Window open");
             }
         }
     }
@@ -164,5 +191,35 @@ public class MainActivity extends AppCompatActivity {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    private void sendEmail(String toEmail, String subject, String message) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.163.com");
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                Log.i("Email", "Auth");
+                return new PasswordAuthentication("tester6262@163.com", "NFEGYJDKMWFHEFVA");
+            }
+        });
+
+        try {
+            MimeMessage mm = new MimeMessage(session);
+            mm.setFrom(new InternetAddress("tester6262@163.com", "Monitor"));
+            mm.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            mm.setSubject(subject);
+            mm.setText(message);
+            Transport.send(mm);
+            Log.i("Email", "sent");
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

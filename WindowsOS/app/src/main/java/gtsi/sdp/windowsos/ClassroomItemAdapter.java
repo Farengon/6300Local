@@ -103,12 +103,6 @@ public class ClassroomItemAdapter extends RecyclerView.Adapter<ClassroomItemAdap
     }
 
     public void add_item(Classroom classroom) {
-        for (int i = 0; i < ClassroomManager.getInstance().getClassroomList().size(); i++) {
-            Classroom c = ClassroomManager.getInstance().getClassroomList().get(i);
-            if (c.getRoomNumber() == classroom.getRoomNumber() && c.getHint().equals(classroom.getHint())) {
-                return;
-            }
-        }
         ClassroomManager.getInstance().getClassroomList().add(classroom);
 //        notifyItemInserted(0);
         notifyDataSetChanged();
@@ -120,14 +114,23 @@ public class ClassroomItemAdapter extends RecyclerView.Adapter<ClassroomItemAdap
 //        notifyDataSetChanged();
 //    }
 
-    public void remove(int class_number, String hint) {
+    public void remove(int classroom_number, String hint) {
         for (int i = 0; i < ClassroomManager.getInstance().getClassroomList().size(); i++) {
             Classroom c = ClassroomManager.getInstance().getClassroomList().get(i);
-            if (c.getRoomNumber() == class_number && c.getHint().equals(hint)) {
+            if (c.getRoomNumber() == classroom_number && c.getHint().equals(hint)) {
                 ClassroomManager.getInstance().getClassroomList().remove(i);
                 notifyDataSetChanged();
                 break;
             }
         }
+    }
+
+    public boolean inList(int classroom_number, String hint) {
+        for (Classroom c: ClassroomManager.getInstance().getClassroomList()) {
+            if (c.getRoomNumber() == classroom_number && c.getHint().equals(hint)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
