@@ -155,17 +155,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            test_text.setText(msg);
+//            test_text.setText(msg);
             if (msg.equals("310d")) {
-                if (!adapter.inList(408, "Window open")) {
-                    adapter.add_item(new Classroom(408, "Window open", true));
+                if (!adapter.inList(499, "Window open")) {
+                    adapter.add_item(new Classroom(499, "Window open", true));
 
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Handler handler = new Handler(Looper.getMainLooper());
 
                     executor.execute(() -> {
                         // Background work: sending the email
-                        sendEmail("lliu484@gatech.edu", "New Task!", "Window in room408 is open!");
+                        sendEmail("lliu484@gatech.edu", "New Task!", "Window in room499 is open!");
 
                         handler.post(() -> {
                             // UI Thread work: update the UI after sending the email, if necessary
@@ -175,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else if (msg.equals("300d")) {
-                adapter.remove(408, "Window open");
-                TaskManager.getInstance().setCompleteTaskByFeature(408, "Window open");
+                adapter.remove(499, "Window open");
+                TaskManager.getInstance().setCompleteTaskByFeature(499, "Window open");
 
             }
         }
